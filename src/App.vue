@@ -130,6 +130,21 @@
         </v-tab-item>
       </v-tabs>
     </v-card>
+    <v-card height="100">
+      <v-footer absolute class="font-weight-medium">
+        <v-col cols="12">
+          <strong>Rafał Ewiak</strong>
+          <v-btn
+            fixed
+            right
+            href="https://github.com/Evenlaxxus/POD"
+            target="_blank"
+          >
+            Kod źródłowy oraz Przykłady
+          </v-btn>
+        </v-col>
+      </v-footer>
+    </v-card>
   </v-app>
 </template>
 <script>
@@ -271,7 +286,7 @@ export default {
     },
     encode_playfair() {
       var tab = new Array();
-      var key = this.keyword;
+      var key = this.keyword.toLowerCase();
       var s = delete_redundant(key.replace(/\s/g, ""));
 
       for (var i = 0; i < s.length; i++) {
@@ -311,6 +326,7 @@ export default {
           letter2 = "x";
           pom = 2;
         }
+        if (letter1 == letter2) letter2 = "x";
         result += encode(matrix, letter1, letter2);
         if (pom == 1) result += " ";
         if (pom == 2) result += "\n";
@@ -321,7 +337,7 @@ export default {
     },
     decode_playfair() {
       var tab = new Array();
-      var key = this.keyword;
+      var key = this.keyword.toLowerCase();
       var s = delete_redundant(key.replace(/\s/g, ""));
 
       for (var i = 0; i < s.length; i++) {
