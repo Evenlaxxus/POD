@@ -9,8 +9,8 @@ Dana jest macierz 5x5 którą wypełniamy 25 literami bez powtórzeń. Najpierw 
 |-|-|-|-|-|
 |R|D|A|B|C|
 |F|G|H|I|L|
-|M|N|P|S|T|
-|U|V|W|X|Z|
+|M|N|P|Q|S|
+|T|U|V|X|Z|
 
 Następnie należy podzielić tekst jawny na pary liter np. WORD zapisujemy jako WO=RD.
 
@@ -29,8 +29,8 @@ Mamy klucz KEYWORD i chcemy zaszyfrować słowo PASSWORD:
 |-|-|-|-|-|
 |R|D|A|B|C|
 |F|G|H|I|L|
-|M|N|P|S|T|
-|U|V|W|X|Z|
+|M|N|P|Q|S|
+|T|U|V|X|Z|
 
 2. Dzielimy słowo PASSWORD na pary liter zgodnie z zasadami:
 PA-SX-WO-RD
