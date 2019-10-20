@@ -35,7 +35,7 @@ Mamy klucz KEYWORD i chcemy zaszyfrować słowo PASSWORD:
 2. Dzielimy słowo PASSWORD na pary liter zgodnie z zasadami:
 PA-SX-WO-RD
 
-3. Kodujemy słowo za pomocą macierzy i powyrzszych zasad otrzymując szyfrogram: 
+3. Kodujemy słowo za pomocą macierzy i powyrzszych zasad otrzymując szyfrogram: VHQZOKDA.
 ## Project setup
 ```
 npm install
