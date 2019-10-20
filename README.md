@@ -10,6 +10,11 @@ Dana jest macierz 5x5 którą wypełniamy 25 literami bez powtórzeń. Najpierw 
 |M|N|P|S|T|
 |U|V|W|X|Z|
 
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+
 
 ## Project setup
 ```
