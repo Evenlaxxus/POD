@@ -5,15 +5,11 @@
 ### Opis algorytmu
 Dana jest macierz 5x5 którą wypełniamy 25 literami bez powtórzeń. Najpierw wpisujemy klucz pomijając powtarzające się litery, a następnie dopełniamy macierz pozostałymi literami alfabetu ( bez polskich liter), przy czym literę J zamieniamy literę na I. Np. słowo kluczowe KEYWORD
 |K|E|Y|W|O|
+|-|-|-|-|-|
 |R|D|A|B|C|
 |F|G|H|I|L|
 |M|N|P|S|T|
 |U|V|W|X|Z|
-
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
 
 
 ## Project setup
