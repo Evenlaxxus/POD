@@ -21,7 +21,7 @@ Następnie należy podzielić tekst jawny na pary liter np. WORD zapisujemy jako
 - Jeśli obie litery występują w tej samej kolumnie, zastępujemy każdą z liter literą z dołu, np. KU kodujemy jako RK. 
 - W przypadku, różnego wiersza i kolumnyzastępujemy je literami tworzącymi prostokąt z literami szyfrowanymi, np. KA kodujemy jako YR.
 
-### Przykład
+#### Przykład
 Mamy klucz KEYWORD i chcemy zaszyfrować słowo PASSWORD:
 1. Tworzymy macierz z użyciem klucza:
 
