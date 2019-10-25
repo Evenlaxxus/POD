@@ -3,6 +3,13 @@
     <v-card>
       <v-toolbar class="grey darken-4">
         <v-toolbar-title>Podstawy ochrony danych</v-toolbar-title>
+        <v-spacer></v-spacer>
+
+        <v-toolbar-items>
+          <v-btn text href="https://github.com/Evenlaxxus/POD" target="_blank"
+            >About</v-btn
+          >
+        </v-toolbar-items>
       </v-toolbar>
       <v-tabs vertical background-color="grey darken-3">
         <!-- zakładka 1 -->
@@ -30,6 +37,15 @@
                       placeholder="Enter password here."
                       clearable
                     ></v-textarea>
+                    <v-file-input
+                      v-model="file"
+                      placeholder="Upload your txt file"
+                      label="File input"
+                      accept=".txt"
+                      prepend-icon="mdi-paperclip"
+                      @change="loadTextFromFile"
+                    >
+                    </v-file-input>
                   </v-col>
                   <v-col>
                     <v-text-field
@@ -72,7 +88,6 @@
                       name="decoded_playfair"
                       label="Decoded password"
                       placeholder="Decoded password will appear here."
-                      disabled
                     ></v-textarea>
                   </v-col>
                 </v-row>
@@ -130,25 +145,142 @@
         </v-tab-item>
       </v-tabs>
     </v-card>
-    <v-card height="100">
-      <v-footer absolute class="font-weight-medium">
-        <v-col cols="12">
-          <strong>Rafał Ewiak</strong>
-          <v-btn
-            fixed
-            right
-            href="https://github.com/Evenlaxxus/POD"
-            target="_blank"
-          >
-            Kod źródłowy oraz Przykłady
-          </v-btn>
-        </v-col>
+    <v-card>
+      <v-footer dark padless>
+        <v-card class="flex" flat tile>
+          <v-card-text class="py-2 white--text text-center">
+            {{ new Date().getFullYear() }} — <strong>Rafał Ewiak</strong>
+          </v-card-text>
+        </v-card>
       </v-footer>
     </v-card>
   </v-app>
 </template>
 <script>
 // import HelloWorld from "./components/HelloWorld";
+
+export default {
+  created() {
+    this.$vuetify.theme.dark = true;
+  },
+  name: "App",
+  components: {
+    // HelloWorld
+  },
+  data: () => ({
+    password: "",
+    keyword: "",
+    e: "",
+    d: "",
+    file: null
+  }),
+  methods: {
+    msg() {
+      console.log(this.txtin);
+    },
+    encode_playfair() {
+      var tab = new Array();
+      var key = this.keyword.toLowerCase();
+      var s = delete_redundant(key.replace(/\s/g, ""));
+
+      for (var i = 0; i < s.length; i++) {
+        tab.push(s[i]);
+      }
+
+      tab = fill_alphabet(tab);
+      var matrix = to_matrix(tab);
+      console.log(matrix);
+
+      var result = "";
+      var pass = this.password
+        .toLowerCase()
+        .replace(/j/gi, "i")
+        .replace(/[^\w\s]/gi, "")
+        .replace(/\r/gi, " ");
+      var letter1 = "",
+        letter2 = "";
+      var pom = 0;
+      for (var j = 0; j < pass.length; j = j + 2) {
+        letter1 = pass[j];
+        letter2 = pass[j + 1];
+        if (letter1 == " ") {
+          j--;
+          result += " ";
+          continue;
+        }
+        if (letter1 == "\n") {
+          j--;
+          result += "\n";
+          continue;
+        }
+        if (letter2 == " ") {
+          letter2 = "x";
+          pom = 1;
+        }
+        if (letter2 == "\n" || letter2 == null) {
+          letter2 = "x";
+          pom = 2;
+        }
+        if (letter1 == letter2) letter2 = "x";
+        result += encode(matrix, letter1, letter2);
+        if (pom == 1) result += " ";
+        if (pom == 2) result += "\n";
+        pom = 0;
+      }
+      console.log(result);
+      this.e = result;
+    },
+    decode_playfair() {
+      var tab = new Array();
+      var key = this.keyword.toLowerCase();
+      var s = delete_redundant(key.replace(/\s/g, ""));
+
+      for (var i = 0; i < s.length; i++) {
+        tab.push(s[i]);
+      }
+
+      tab = fill_alphabet(tab);
+      var matrix = to_matrix(tab);
+
+      var result = "";
+      var pass = this.e;
+      var letter1 = "",
+        letter2 = "";
+      var pom = 0;
+      for (var j = 0; j < pass.length - 1; j = j + 2) {
+        letter1 = pass[j];
+        if (letter1 == " ") {
+          j--;
+          result += " ";
+          continue;
+        }
+        if (letter1 == "\n") {
+          j--;
+          result += "\n";
+          continue;
+        }
+        letter1 = pass[j];
+        letter2 = pass[j + 1];
+        result += decode(matrix, letter1, letter2);
+        if (pom == 1) result += " ";
+        if (pom == 2) result += "\n";
+        pom = 0;
+      }
+      console.log(result);
+      this.d = result;
+    },
+    loadTextFromFile() {
+      const file = this.file;
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.password = e.target.result;
+        console.log(e.target.result);
+      };
+      reader.readAsText(file);
+    }
+  }
+};
+
 function delete_redundant(s) {
   for (var i = 0; i < s.length - 1; i++) {
     for (var j = i + 1; j < s.length; j++) {
@@ -265,113 +397,4 @@ function decode(matrix, letter1, letter2) {
   }
   return result;
 }
-
-export default {
-  created() {
-    this.$vuetify.theme.dark = true;
-  },
-  name: "App",
-  components: {
-    // HelloWorld
-  },
-  data: () => ({
-    password: "",
-    keyword: "",
-    e: "",
-    d: ""
-  }),
-  methods: {
-    msg() {
-      console.log(this.txtin);
-    },
-    encode_playfair() {
-      var tab = new Array();
-      var key = this.keyword.toLowerCase();
-      var s = delete_redundant(key.replace(/\s/g, ""));
-
-      for (var i = 0; i < s.length; i++) {
-        tab.push(s[i]);
-      }
-
-      tab = fill_alphabet(tab);
-      var matrix = to_matrix(tab);
-      console.log(matrix);
-
-      var result = "";
-      var pass = this.password
-        .toLowerCase()
-        .replace("j", "i")
-        .replace(/[^\w\s]/gi, "");
-      var letter1 = "",
-        letter2 = "";
-      var pom = 0;
-      for (var j = 0; j < pass.length; j = j + 2) {
-        letter1 = pass[j];
-        letter2 = pass[j + 1];
-        if (letter1 == " ") {
-          j++;
-          result += " ";
-        }
-        if (letter1 == "\n") {
-          j++;
-          result += "\n";
-        }
-        letter1 = pass[j];
-        letter2 = pass[j + 1];
-        if (letter2 == " ") {
-          letter2 = "x";
-          pom = 1;
-        }
-        if (letter2 == "\n" || letter2 == null) {
-          letter2 = "x";
-          pom = 2;
-        }
-        if (letter1 == letter2) letter2 = "x";
-        result += encode(matrix, letter1, letter2);
-        if (pom == 1) result += " ";
-        if (pom == 2) result += "\n";
-        pom = 0;
-      }
-      console.log(result);
-      this.e = result;
-    },
-    decode_playfair() {
-      var tab = new Array();
-      var key = this.keyword.toLowerCase();
-      var s = delete_redundant(key.replace(/\s/g, ""));
-
-      for (var i = 0; i < s.length; i++) {
-        tab.push(s[i]);
-      }
-
-      tab = fill_alphabet(tab);
-      var matrix = to_matrix(tab);
-
-      var result = "";
-      var pass = this.e;
-      var letter1 = "",
-        letter2 = "";
-      var pom = 0;
-      for (var j = 0; j < pass.length - 1; j = j + 2) {
-        letter1 = pass[j];
-        if (letter1 == " ") {
-          j++;
-          result += " ";
-        }
-        if (letter1 == "\n") {
-          j++;
-          result += "\n";
-        }
-        letter1 = pass[j];
-        letter2 = pass[j + 1];
-        result += decode(matrix, letter1, letter2);
-        if (pom == 1) result += " ";
-        if (pom == 2) result += "\n";
-        pom = 0;
-      }
-      console.log(result);
-      this.d = result;
-    }
-  }
-};
 </script>
