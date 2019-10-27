@@ -29,66 +29,94 @@
                   </v-col>
                 </v-row>
                 <v-row>
+                  <!-- 1 -->
                   <v-col>
-                    <v-textarea
-                      v-model="password"
-                      name="input_playfair"
-                      label="Password"
-                      placeholder="Enter password here."
-                      clearable
-                    ></v-textarea>
-                    <v-file-input
-                      v-model="file"
-                      placeholder="Upload your txt file"
-                      label="File input"
-                      accept=".txt"
-                      prepend-icon="mdi-paperclip"
-                      @change="loadTextFromFile"
-                    >
-                    </v-file-input>
+                    <v-row>
+                      <v-textarea
+                        v-model="password"
+                        name="input_playfair"
+                        label="Password"
+                        placeholder="Enter password here."
+                        clearable
+                      ></v-textarea>
+                    </v-row>
+                    <v-row>
+                      <v-file-input
+                        v-model="file"
+                        placeholder="Upload your txt file"
+                        label="File input"
+                        accept=".txt"
+                        prepend-icon="mdi-paperclip"
+                        @change="loadTextFromFile"
+                      >
+                      </v-file-input>
+                    </v-row>
+                    <v-row>
+                      <v-btn depressed large v-on:click="encode_playfair"
+                        >Encode</v-btn
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-textarea
+                        v-model="e"
+                        name="encoded_playfair"
+                        label="Encoded password"
+                        placeholder="Encoded password will appear here."
+                      ></v-textarea>
+                    </v-row>
+                    <v-row>
+                      <v-btn depressed large v-on:click="decode_playfair"
+                        >Decode</v-btn
+                      >
+                    </v-row>
+                    <v-row>
+                      <v-textarea
+                        v-model="d"
+                        name="decoded_playfair"
+                        label="Decoded password"
+                        placeholder="Decoded password will appear here."
+                      ></v-textarea>
+                    </v-row>
                   </v-col>
+
+                  <!-- 2 -->
                   <v-col>
-                    <v-text-field
-                      v-model="keyword"
-                      name="keyword_playfair"
-                      label="Keyword"
-                      placeholder="Enter keyword here."
-                      clearable
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-btn depressed large v-on:click="encode_playfair"
-                      >Encode</v-btn
-                    >
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-textarea
-                      v-model="e"
-                      name="encoded_playfair"
-                      label="Encoded password"
-                      placeholder="Encoded password will appear here."
-                    ></v-textarea>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-btn depressed large v-on:click="decode_playfair"
-                      >Decode</v-btn
-                    >
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-textarea
-                      v-model="d"
-                      name="decoded_playfair"
-                      label="Decoded password"
-                      placeholder="Decoded password will appear here."
-                    ></v-textarea>
+                    <v-row>
+                      <v-text-field
+                        v-model="keyword"
+                        name="keyword_playfair"
+                        label="Keyword"
+                        placeholder="Enter keyword here."
+                        clearable
+                      ></v-text-field>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <h2 class="text-center">
+                          Matrix with keyword
+                        </h2>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-simple-table>
+                          <tbody>
+                            <tr
+                              height="10"
+                              v-for="(row, index) in matrix"
+                              :key="index"
+                            >
+                              <td
+                                v-for="(column, colIndex) in row"
+                                :key="colIndex"
+                              >
+                                {{ column }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </v-simple-table>
+                      </v-col>
+                    </v-row>
                   </v-col>
                 </v-row>
               </v-container>
@@ -172,7 +200,8 @@ export default {
     keyword: "",
     e: "",
     d: "",
-    file: null
+    file: null,
+    matrix: null
   }),
   methods: {
     msg() {
@@ -189,6 +218,7 @@ export default {
 
       tab = fill_alphabet(tab);
       var matrix = to_matrix(tab);
+      this.matrix = matrix;
       console.log(matrix);
 
       var result = "";
@@ -241,6 +271,7 @@ export default {
 
       tab = fill_alphabet(tab);
       var matrix = to_matrix(tab);
+      this.matrix = matrix;
 
       var result = "";
       var pass = this.e;
