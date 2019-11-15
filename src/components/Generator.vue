@@ -65,6 +65,12 @@
                 >
               </v-col>
               <v-col>
+                <v-btn depressed large v-on:click="xor_execute"
+                  >XOR input</v-btn
+                >
+              </v-col>
+
+              <v-col>
                 <v-simple-table>
                   <tbody>
                     <tr
@@ -141,18 +147,27 @@ export default {
       var randomBinary = require("random-binary");
       this.lfsr = randomBinary(this.lfsr_length);
       this.stats();
-      this.xor_position_tab();
     },
     xor_position_tab() {
       this.xor_tab = this.xor_position.split(",").sort((a, b) => a - b);
-      console.log(this.xor_tab)
     },
-    xor(x,y){
-      if(x==y) return 0;
-      else return 1;
-    },
-    xor_input(){
+    xor(x, y) {
+      console.log(x + " " + y);
 
+      if (x == y) return 0;
+      if (x != y) return 1;
+    },
+    xor_input(tab, input) {
+      if (tab.length == 1) return input[tab[0]];
+      return this.xor(input[tab.pop()], this.xor_input(tab, input));
+    },
+    xor_execute() {
+      this.xor_position_tab();
+
+      this.lfsr =
+        this.xor_input(this.xor_tab, this.lfsr) +
+        this.lfsr.slice(0, this.lfsr.length - 1);
+      this.stats();
     }
   }
 };
