@@ -57,7 +57,7 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-btn depressed large v-on:click="generate">Generate</v-btn>
+                <v-btn depressed large v-on:click="generate">Random LFSR</v-btn>
               </v-col>
               <v-col>
                 <v-btn depressed large v-on:click="self_shrink"
@@ -141,9 +141,18 @@ export default {
       var randomBinary = require("random-binary");
       this.lfsr = randomBinary(this.lfsr_length);
       this.stats();
+      this.xor_position_tab();
     },
     xor_position_tab() {
-      this.xor_tab = this.xor_position.split(",");
+      this.xor_tab = this.xor_position.split(",").sort((a, b) => a - b);
+      console.log(this.xor_tab)
+    },
+    xor(x,y){
+      if(x==y) return 0;
+      else return 1;
+    },
+    xor_input(){
+
     }
   }
 };
