@@ -94,6 +94,9 @@
                 placeholder="Generator output will appear here."
               ></v-textarea>
             </v-row>
+            <v-row>
+              <v-btn depressed large v-on:click="saveOutput">Save as txt</v-btn>
+            </v-row>
           </v-col>
         </v-row>
       </v-container>
@@ -121,6 +124,28 @@ export default {
         console.log(e.target.result);
       };
       reader.readAsText(file);
+    },
+    saveOutput() {
+      var FileSaver = require("file-saver");
+      var blob = null;
+      if (this.binary) {
+        var x = null;
+        var out = "";
+        for (var i = 0; i < this.output.length; i += 8) {
+          if (i + 8 > this.output.length)
+            x = this.output.slice(i, this.output.length - 1);
+          else x = this.output.slice(i, i + 8);
+          out += String.fromCharCode(parseInt(x, 2));
+        }
+        blob = new Blob([out], {
+          type: "text/plain;charset=utf-8"
+        });
+      } else {
+        blob = new Blob([this.output], {
+          type: "text/plain;charset=utf-8"
+        });
+      }
+      FileSaver.saveAs(blob, "file.txt");
     },
     self_shrink() {
       var lfsr = this.lfsr;
