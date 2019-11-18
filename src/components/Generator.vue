@@ -37,10 +37,10 @@
             <v-row>
               <v-col>
                 <v-text-field
-                  v-model="lfsr_length"
-                  name="lfsr_length"
-                  label="LFSR length"
-                  placeholder="Enter LFSR length here."
+                  v-model="output_length"
+                  name="output_length"
+                  label="Output length"
+                  placeholder="Enter output length here."
                   clearable
                 ></v-text-field>
               </v-col>
@@ -110,7 +110,7 @@ export default {
     lfsr: "",
     output: "",
     file: null,
-    lfsr_length: "",
+    output_length: "",
     xor_position: "",
     xor_tab: null,
     byte_stats: [["Number of zeros", "Number of ones"], []]
@@ -121,7 +121,7 @@ export default {
       const reader = new FileReader();
       reader.onload = e => {
         this.lfsr = e.target.result;
-        console.log(e.target.result);
+        // console.log(e.target.result);
       };
       reader.readAsText(file);
     },
@@ -148,36 +148,38 @@ export default {
       FileSaver.saveAs(blob, "file.txt");
     },
     self_shrink() {
-      var lfsr = this.lfsr;
-      var output = "";
-      for (var i = 0; i < lfsr.length; i += 2) {
-        if (lfsr[i] == "0") continue;
-        else output += lfsr[i + 1];
-        this.output = output;
+      
+      while(this.output.length<parseInt(this.output_length)) {
+          
+        if (parseInt(this.lfsr[this.lfsr.length - 2]) == 1) {
+          this.output += this.lfsr[this.lfsr.length - 1];
+        }
+        this.xor_execute();
       }
+      this.stats();
+
     },
     stats() {
       this.byte_stats[1][0] = 0;
       this.byte_stats[1][1] = 0;
 
-      for (const key in this.lfsr) {
-        if (this.lfsr[key] == "1") {
+      for (const key in this.output) {
+        if (this.output[key] == "1") {
           this.byte_stats[1][1]++;
-        } else if (this.lfsr[key] == "0") {
+        } else if (this.output[key] == "0") {
           this.byte_stats[1][0]++;
         }
       }
     },
     generate() {
       var randomBinary = require("random-binary");
-      this.lfsr = randomBinary(this.lfsr_length);
-      this.stats();
+      this.lfsr = randomBinary();
     },
     xor_position_tab() {
       this.xor_tab = this.xor_position.split(",").sort((a, b) => a - b);
     },
     xor(x, y) {
-      console.log(x + " " + y);
+      // console.log(x + " " + y);
 
       if (x == y) return 0;
       if (x != y) return 1;
@@ -192,7 +194,7 @@ export default {
       this.lfsr =
         this.xor_input(this.xor_tab, this.lfsr) +
         this.lfsr.slice(0, this.lfsr.length - 1);
-      this.stats();
+
     }
   }
 };
