@@ -31,7 +31,7 @@
                     label="File input"
                     accept=".txt"
                     prepend-icon="mdi-paperclip"
-                    @change="loadTextFromFile"
+                    @change="loadTextFromFile1"
                   >
                   </v-file-input>
                 </v-row>
@@ -55,7 +55,7 @@
                     label="File input"
                     accept=".txt"
                     prepend-icon="mdi-paperclip"
-                    @change="loadTextFromFile"
+                    @change="loadTextFromFile2"
                   >
                   </v-file-input>
                 </v-row>
@@ -94,18 +94,28 @@
 <script>
 export default {
   data: () => ({
-    file: null,
+    file1: null,
+    file2: null,
     input: "",
     output: "",
     byte_text: "",
     hash: ""
   }),
   methods: {
-    loadTextFromFile() {
-      const file = this.file;
+    loadTextFromFile1() {
+      const file = this.file1;
       const reader = new FileReader();
       reader.onload = e => {
         this.input = e.target.result;
+        // console.log(e.target.result);
+      };
+      reader.readAsText(file);
+    },
+    loadTextFromFile2() {
+      const file = this.file2;
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.hash = e.target.result;
         // console.log(e.target.result);
       };
       reader.readAsText(file);
