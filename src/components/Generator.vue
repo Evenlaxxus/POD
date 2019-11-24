@@ -148,16 +148,14 @@ export default {
       FileSaver.saveAs(blob, "file.txt");
     },
     self_shrink() {
-      
-      while(this.output.length<parseInt(this.output_length)) {
-          
+      this.output = "";
+      while (this.output.length < parseInt(this.output_length)) {
         if (parseInt(this.lfsr[this.lfsr.length - 2]) == 1) {
           this.output += this.lfsr[this.lfsr.length - 1];
         }
         this.xor_execute();
       }
       this.stats();
-
     },
     stats() {
       this.byte_stats[1][0] = 0;
@@ -179,8 +177,6 @@ export default {
       this.xor_tab = this.xor_position.split(",").sort((a, b) => a - b);
     },
     xor(x, y) {
-      // console.log(x + " " + y);
-
       if (x == y) return 0;
       if (x != y) return 1;
     },
@@ -194,7 +190,6 @@ export default {
       this.lfsr =
         this.xor_input(this.xor_tab, this.lfsr) +
         this.lfsr.slice(0, this.lfsr.length - 1);
-
     }
   }
 };

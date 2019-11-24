@@ -31,26 +31,11 @@
 
         <!-- zakładka 3 -->
         <v-tab>
-          Szyfr 3
+          Degenerator
         </v-tab>
         <v-divider></v-divider>
         <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <v-textarea
-                name="input_3"
-                label="Password"
-                placeholder="Enter password here."
-                clearable
-              ></v-textarea>
-              <v-textarea
-                name="output_3"
-                label="Encoded password"
-                placeholder="Encoded password will appear here."
-                disabled
-              ></v-textarea>
-            </v-card-text>
-          </v-card>
+          <Degenerator />
         </v-tab-item>
       </v-tabs>
     </v-card>
@@ -68,6 +53,7 @@
 <script>
 import Playfair from "./components/Playfair";
 import Generator from "./components/Generator";
+import Degenerator from "./components/Degenerator";
 
 export default {
   created() {
@@ -76,7 +62,8 @@ export default {
   name: "App",
   components: {
     Playfair,
-    Generator
+    Generator,
+    Degenerator
   },
   data: () => ({}),
   methods: {}
