@@ -5,7 +5,7 @@
         <v-row>
           <v-col>
             <h1 class="text-center">
-              Zadanie 3
+              Szyfrator
             </h1>
           </v-col>
         </v-row>
@@ -26,7 +26,7 @@
 
                 <v-row>
                   <v-file-input
-                    v-model="file"
+                    v-model="file1"
                     placeholder="Upload txt file"
                     label="File input"
                     accept=".txt"
@@ -40,18 +40,20 @@
                 <v-row>
                   <v-textarea
                     v-model="hash"
-                    name="Hash"
-                    label="Hash"
-                    placeholder="Enter hash here."
+                    name="Key"
+                    label="Key"
+                    placeholder="Enter key here."
                     clearable
-                    v-on:change="string_to_binary"
+                    v-on:change="msg_display"
                   ></v-textarea>
                 </v-row>
-
+                <v-row>
+                  <p>{{msg}}</p>
+                </v-row>
                 <v-row>
                   <v-file-input
-                    v-model="file"
-                    placeholder="Upload txt file"
+                    v-model="file2"
+                    placeholder="Upload txt file with key"
                     label="File input"
                     accept=".txt"
                     prepend-icon="mdi-paperclip"
@@ -59,6 +61,7 @@
                   >
                   </v-file-input>
                 </v-row>
+                
               </v-col>
             </v-row>
 
@@ -71,7 +74,7 @@
               ></v-textarea>
             </v-row>
             <v-row>
-              <v-btn depressed large v-on:click="degenerate">Degenerate</v-btn>
+              <v-btn depressed large v-on:click="degenerate">Encode</v-btn>
             </v-row>
             <v-row>
               <v-textarea
@@ -82,7 +85,34 @@
               ></v-textarea>
             </v-row>
             <v-row>
-              <v-btn depressed large v-on:click="saveOutput">Save as txt</v-btn>
+              <v-col>
+                <v-btn depressed large v-on:click="saveOutput">Save as txt</v-btn>
+              </v-col>
+              <v-col>
+                <v-btn depressed large v-on:click="decode">Decode</v-btn>
+              </v-col>
+
+            </v-row>
+            
+            <v-row>
+              <v-col>
+
+              <v-textarea
+                v-model="decoded"
+                name="Decoded output"
+                label="Decoded output"
+                placeholder="Decoded output will appear here."
+              ></v-textarea>
+              </v-col>
+              <v-col>
+              <v-textarea
+                v-model="text_again"
+                name="text_again"
+                label="Return to text"
+                placeholder="Decoded text will appear here."
+              ></v-textarea>
+              </v-col>
+
             </v-row>
           </v-col>
         </v-row>
@@ -99,9 +129,21 @@ export default {
     input: "",
     output: "",
     byte_text: "",
-    hash: ""
+    hash: "",
+    msg: "",
+    decoded: "",
+    text_again: ""
   }),
   methods: {
+    msg_display(){
+      if(this.hash.length<this.byte_text.length){
+        this.msg = "Key is to short";
+      }else if(this.hash.length>this.byte_text.length){
+        this.msg = "Key is to long, it will be wrapped";
+      }if(this.hash.length==this.byte_text.length){
+        this.msg = "";
+      }
+    },
     loadTextFromFile1() {
       const file = this.file1;
       const reader = new FileReader();
@@ -145,9 +187,21 @@ export default {
     string_to_binary() {
       var binary = "";
       for (var i = 0; i < this.input.length; i++) {
-        binary += this.input.charCodeAt(i).toString(2);
+        var pom = "";
+        pom = this.input.charCodeAt(i).toString(2);
+        while(pom.length<8){
+          pom = "0" + pom;
+        }
+        binary+=pom;
       }
       this.byte_text = binary;
+    },
+    binary_to_string(){
+      var s = "";
+      for(var i=0; i < this.decoded.length; i = i + 8){
+        s=this.decoded.slice(i,i+8);
+        this.text_again += String.fromCharCode(parseInt(s, 2));
+      }
     },
     xor(x, y) {
       if (x == y) return 0;
@@ -158,6 +212,13 @@ export default {
       for (var i = 0; i < this.byte_text.length; i++) {
         this.output += this.xor(this.byte_text[i], this.hash[i]);
       }
+    },
+    decode() {
+      this.decoded = "";
+      for (var i = 0; i < this.output.length; i++) {
+        this.decoded += this.xor(this.output[i], this.hash[i]);
+      }
+      this.binary_to_string();
     }
   }
 };

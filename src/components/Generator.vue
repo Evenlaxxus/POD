@@ -92,6 +92,7 @@
                 name="generator_output"
                 label="Generator output"
                 placeholder="Generator output will appear here."
+                clearable
               ></v-textarea>
             </v-row>
             <v-row>
