@@ -37,6 +37,15 @@
         <v-tab-item>
           <Degenerator />
         </v-tab-item>
+
+        <!-- zakładka 4 -->
+        <v-tab>
+          Testy
+        </v-tab>
+        <v-divider></v-divider>
+        <v-tab-item>
+          <Testy />
+        </v-tab-item>
       </v-tabs>
     </v-card>
     <v-card>
@@ -54,6 +63,7 @@
 import Playfair from "./components/Playfair";
 import Generator from "./components/Generator";
 import Degenerator from "./components/Degenerator";
+import Testy from "./components/Testy";
 
 export default {
   created() {
@@ -63,7 +73,8 @@ export default {
   components: {
     Playfair,
     Generator,
-    Degenerator
+    Degenerator,
+    Testy
   },
   data: () => ({}),
   methods: {}
