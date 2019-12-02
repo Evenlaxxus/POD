@@ -162,6 +162,7 @@ export default {
       const reader = new FileReader();
       reader.onload = e => {
         this.input = e.target.result;
+        this.test();
       };
       reader.readAsText(file);
     },
