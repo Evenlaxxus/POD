@@ -23,6 +23,9 @@
               ></v-textarea>
             </v-row>
             <v-row>
+                  <p>{{msg}}</p>
+                </v-row>
+            <v-row>
               <v-col>
                 <v-file-input
                   v-model="file"
@@ -159,6 +162,7 @@ export default {
       const reader = new FileReader();
       reader.onload = e => {
         this.input = e.target.result;
+        this.test();
       };
       reader.readAsText(file);
     },
@@ -228,6 +232,8 @@ export default {
       for (var i = 1; i < this.input.length + 1; i++) {
         if (this.input[i] == this.input[i - 1]) {
           counter++;
+        }else{
+          counter=1;
         }
         if (counter >= 26) {
           this.long_series_pass = false;
@@ -306,10 +312,17 @@ export default {
       if (this.x > 2.16 && this.x < 46.17) this.poker_pass = true;
     },
     test() {
-      this.single_bit();
-      this.series();
-      this.long_series();
-      this.poker();
+      if(this.input.length<20000){
+        this.msg = "Text is to short";
+      }else if(this.input.length>20000){
+        this.msg = "Text is to long";
+      }if(this.input.length==20000){
+        this.msg = "";
+        this.single_bit();
+        this.series();
+        this.long_series();
+        this.poker();
+      }
     }
   }
 };
