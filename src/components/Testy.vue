@@ -23,8 +23,8 @@
               ></v-textarea>
             </v-row>
             <v-row>
-                  <p>{{msg}}</p>
-                </v-row>
+              <p>{{ msg }}</p>
+            </v-row>
             <v-row>
               <v-col>
                 <v-file-input
@@ -128,13 +128,13 @@ export default {
     poker_pass: false,
     x: 0,
     series_tab: [
-      ["Series length", "Quantity", "Period"],
-      ["1", 0, "2315-2685"],
-      ["2", 0, "1114-1386"],
-      ["3", 0, "527-723"],
-      ["4", 0, "240-384"],
-      ["5", 0, "103-209"],
-      ["6 or more", 0, "103-209"]
+      ["Series length", "Zeros", "Ones", "Period"],
+      ["1", 0, 0, "2315-2685"],
+      ["2", 0, 0, "1114-1386"],
+      ["3", 0, 0, "527-723"],
+      ["4", 0, 0, "240-384"],
+      ["5", 0, 0, "103-209"],
+      ["6 or more", 0, 0, "103-209"]
     ],
     poker_tab: [
       ["Segment", "Quantity"],
@@ -175,52 +175,93 @@ export default {
       if (ones > 9725 && ones < 10275) this.single_bit_pass = true;
     },
     series() {
-      var tab = [0, 0, 0, 0, 0, 0];
+      var tab0 = [0, 0, 0, 0, 0, 0];
+      var tab1 = [0, 0, 0, 0, 0, 0];
       var counter = 1;
       for (var i = 1; i < this.input.length + 1; i++) {
         if (this.input[i] == this.input[i - 1]) {
           counter++;
         } else {
-          switch (counter) {
-            case 1:
-              tab[0]++;
-              break;
-            case 2:
-              tab[1]++;
-              break;
-            case 3:
-              tab[2]++;
-              break;
-            case 4:
-              tab[3]++;
-              break;
-            case 5:
-              tab[4]++;
-              break;
-            default:
-              tab[5]++;
-              break;
+          if (this.input[i] == "1") {
+            switch (counter) {
+              case 1:
+                tab1[0]++;
+                break;
+              case 2:
+                tab1[1]++;
+                break;
+              case 3:
+                tab1[2]++;
+                break;
+              case 4:
+                tab1[3]++;
+                break;
+              case 5:
+                tab1[4]++;
+                break;
+              default:
+                tab1[5]++;
+                break;
+            }
+            counter = 1;
           }
-          counter = 1;
+          if (this.input[i] == "0") {
+            switch (counter) {
+              case 1:
+                tab0[0]++;
+                break;
+              case 2:
+                tab0[1]++;
+                break;
+              case 3:
+                tab0[2]++;
+                break;
+              case 4:
+                tab0[3]++;
+                break;
+              case 5:
+                tab0[4]++;
+                break;
+              default:
+                tab0[5]++;
+                break;
+            }
+            counter = 1;
+          }
         }
       }
-      for (var j = 0; j < tab.length; j++) {
-        this.series_tab[j + 1][1] = tab[j];
+      for (var j = 0; j < tab0.length; j++) {
+        this.series_tab[j + 1][1] = tab0[j];
+      }
+      for (var k = 0; k < tab1.length; k++) {
+        this.series_tab[k + 1][2] = tab1[k];
       }
 
       if (
-        tab[0] > 2315 &&
-        tab[0] < 2685 &&
-        tab[1] > 1114 &&
-        tab[1] < 1386 &&
-        tab[2] > 527 &&
-        tab[2] < 723 &&
-        tab[3] > 240 &&
-        tab[3] < 384 &&
-        tab[4] > 103 &&
-        tab[4] < 209 &&
-        tab[5] > 103 &&
-        tab[5] < 209
+        tab0[0] > 2315 &&
+        tab0[0] < 2685 &&
+        tab0[1] > 1114 &&
+        tab0[1] < 1386 &&
+        tab0[2] > 527 &&
+        tab0[2] < 723 &&
+        tab0[3] > 240 &&
+        tab0[3] < 384 &&
+        tab0[4] > 103 &&
+        tab0[4] < 209 &&
+        tab0[5] > 103 &&
+        tab0[5] < 209 &&
+        tab1[0] > 2315 &&
+        tab1[0] < 2685 &&
+        tab1[1] > 1114 &&
+        tab1[1] < 1386 &&
+        tab1[2] > 527 &&
+        tab1[2] < 723 &&
+        tab1[3] > 240 &&
+        tab1[3] < 384 &&
+        tab1[4] > 103 &&
+        tab1[4] < 209 &&
+        tab1[5] > 103 &&
+        tab1[5] < 209
       ) {
         this.series_pass = true;
       }
@@ -232,8 +273,8 @@ export default {
       for (var i = 1; i < this.input.length + 1; i++) {
         if (this.input[i] == this.input[i - 1]) {
           counter++;
-        }else{
-          counter=1;
+        } else {
+          counter = 1;
         }
         if (counter >= 26) {
           this.long_series_pass = false;
@@ -312,11 +353,12 @@ export default {
       if (this.x > 2.16 && this.x < 46.17) this.poker_pass = true;
     },
     test() {
-      if(this.input.length<20000){
+      if (this.input.length < 20000) {
         this.msg = "Text is to short";
-      }else if(this.input.length>20000){
+      } else if (this.input.length > 20000) {
         this.msg = "Text is to long";
-      }if(this.input.length==20000){
+      }
+      if (this.input.length == 20000) {
         this.msg = "";
         this.single_bit();
         this.series();
