@@ -31,7 +31,7 @@
 
         <!-- zakładka 3 -->
         <v-tab>
-          Degenerator
+          Szyfrator
         </v-tab>
         <v-divider></v-divider>
         <v-tab-item>

@@ -48,7 +48,7 @@
                   ></v-textarea>
                 </v-row>
                 <v-row>
-                  <p>{{msg}}</p>
+                  <p>{{ msg }}</p>
                 </v-row>
                 <v-row>
                   <v-file-input
@@ -61,7 +61,6 @@
                   >
                   </v-file-input>
                 </v-row>
-                
               </v-col>
             </v-row>
 
@@ -86,33 +85,32 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-btn depressed large v-on:click="saveOutput">Save as txt</v-btn>
-              </v-col>
-              <v-col>
                 <v-btn depressed large v-on:click="decode">Decode</v-btn>
               </v-col>
-
+              <v-col>
+                <v-btn depressed large v-on:click="saveOutput"
+                  >Save as txt</v-btn
+                >
+              </v-col>
             </v-row>
-            
+
             <v-row>
               <v-col>
-
-              <v-textarea
-                v-model="decoded"
-                name="Decoded output"
-                label="Decoded output"
-                placeholder="Decoded output will appear here."
-              ></v-textarea>
+                <v-textarea
+                  v-model="decoded"
+                  name="Decoded output"
+                  label="Decoded output"
+                  placeholder="Decoded output will appear here."
+                ></v-textarea>
               </v-col>
               <v-col>
-              <v-textarea
-                v-model="text_again"
-                name="text_again"
-                label="Return to text"
-                placeholder="Decoded text will appear here."
-              ></v-textarea>
+                <v-textarea
+                  v-model="text_again"
+                  name="text_again"
+                  label="Return to text"
+                  placeholder="Decoded text will appear here."
+                ></v-textarea>
               </v-col>
-
             </v-row>
           </v-col>
         </v-row>
@@ -135,12 +133,13 @@ export default {
     text_again: ""
   }),
   methods: {
-    msg_display(){
-      if(this.hash.length<this.byte_text.length){
+    msg_display() {
+      if (this.hash.length < this.byte_text.length) {
         this.msg = "Key is to short";
-      }else if(this.hash.length>this.byte_text.length){
+      } else if (this.hash.length > this.byte_text.length) {
         this.msg = "Key is to long, it will be wrapped";
-      }if(this.hash.length==this.byte_text.length){
+      }
+      if (this.hash.length == this.byte_text.length) {
         this.msg = "";
       }
     },
@@ -189,17 +188,17 @@ export default {
       for (var i = 0; i < this.input.length; i++) {
         var pom = "";
         pom = this.input.charCodeAt(i).toString(2);
-        while(pom.length<8){
+        while (pom.length < 8) {
           pom = "0" + pom;
         }
-        binary+=pom;
+        binary += pom;
       }
       this.byte_text = binary;
     },
-    binary_to_string(){
+    binary_to_string() {
       var s = "";
-      for(var i=0; i < this.decoded.length; i = i + 8){
-        s=this.decoded.slice(i,i+8);
+      for (var i = 0; i < this.decoded.length; i = i + 8) {
+        s = this.decoded.slice(i, i + 8);
         this.text_again += String.fromCharCode(parseInt(s, 2));
       }
     },
