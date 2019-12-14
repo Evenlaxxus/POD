@@ -46,6 +46,13 @@
         <v-tab-item>
           <Testy />
         </v-tab-item>
+        <v-tab>
+          Steganografia
+        </v-tab>
+        <v-divider></v-divider>
+        <v-tab-item>
+          <Steganografia />
+        </v-tab-item>
       </v-tabs>
     </v-card>
     <v-card>
@@ -64,6 +71,7 @@ import Playfair from "./components/Playfair";
 import Generator from "./components/Generator";
 import Degenerator from "./components/Degenerator";
 import Testy from "./components/Testy";
+import Steganografia from "./components/Steganografia";
 
 export default {
   created() {
@@ -74,7 +82,8 @@ export default {
     Playfair,
     Generator,
     Degenerator,
-    Testy
+    Testy,
+    Steganografia
   },
   data: () => ({}),
   methods: {}
