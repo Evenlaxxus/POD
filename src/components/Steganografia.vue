@@ -100,10 +100,11 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    do_it() {
+    async do_it() {
       var canvas = document.createElement("canvas");
       var image = new Image();
       image.src = this.url;
+      await image;
 
       this.imgWidth = image.width;
       this.imgHeight = image.height;
