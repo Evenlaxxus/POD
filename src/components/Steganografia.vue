@@ -70,6 +70,9 @@
             ></v-textarea>
           </v-col>
         </v-row>
+        <v-row>
+          <v-btn @click="saveBase64AsFile">Download</v-btn>
+        </v-row>
       </v-container>
     </v-card-text>
   </v-card>
@@ -170,6 +173,13 @@ export default {
         );
       }
       return colorTab;
+    },
+    saveBase64AsFile() {
+      var link = document.createElement("a");
+
+      link.setAttribute("href", this.imageAfter);
+      link.setAttribute("download", "plik.png");
+      link.click();
     },
     read_from_img(colorTab) {
       var text = "";
