@@ -125,7 +125,7 @@ export default {
       //TODO tablica kolorów przed
 
       console.log(data);
-      this.ct_b = data;
+      this.ct_b = copyArray(data);
 
       data = this.binary_to_img(imgData.data);
 
@@ -192,4 +192,11 @@ export default {
     }
   }
 };
+function copyArray(tab) {
+  var newTab = new Array();
+  for (let i = 0; i < tab.length; i++) {
+    newTab.push(tab[i]);
+  }
+  return newTab;
+}
 </script>
