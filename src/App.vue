@@ -46,12 +46,23 @@
         <v-tab-item>
           <Testy />
         </v-tab-item>
+
+        <!-- zakładka 5 -->
         <v-tab>
           Steganografia
         </v-tab>
         <v-divider></v-divider>
         <v-tab-item>
           <Steganografia />
+        </v-tab-item>
+
+        <!-- zakładka 6 -->
+        <v-tab>
+          Kryptografia Wizualna
+        </v-tab>
+        <v-divider></v-divider>
+        <v-tab-item>
+          <Visual />
         </v-tab-item>
       </v-tabs>
     </v-card>
@@ -72,6 +83,7 @@ import Generator from "./components/Generator";
 import Degenerator from "./components/Degenerator";
 import Testy from "./components/Testy";
 import Steganografia from "./components/Steganografia";
+import Visual from "./components/Visual";
 
 export default {
   created() {
@@ -83,7 +95,8 @@ export default {
     Generator,
     Degenerator,
     Testy,
-    Steganografia
+    Steganografia,
+    Visual
   },
   data: () => ({}),
   methods: {}
