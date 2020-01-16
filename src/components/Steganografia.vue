@@ -10,11 +10,26 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-text-field
+          <v-textarea
             placeholder="Enter text that will be transferred into image"
             label="Text"
             v-model="input"
-          ></v-text-field>
+            clearable
+          ></v-textarea>
+        </v-row>
+        <v-row>
+          <p class="red--text">{{err}}</p>
+        </v-row>
+      <v-row>
+          <v-file-input
+            v-model="file_txt"
+            placeholder="Upload your txt file"
+            label="File input"
+            accept=".txt"
+            prepend-icon="mdi-paperclip"
+            @change="loadTextFromFile"
+          >
+          </v-file-input>
         </v-row>
         <v-row>
           <v-file-input
@@ -82,11 +97,13 @@
 export default {
   data: () => ({
     url: "",
+    err: "",
     input: "",
     byte_text: "",
     image: "",
     imageAfter: "",
     text_from_img: "",
+    file_txt: null,
     file: null,
     ct_b: null,
     ct_a: null,
@@ -103,6 +120,15 @@ export default {
       };
       reader.readAsDataURL(file);
     },
+      loadTextFromFile() {
+      const file = this.file_txt;
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.input = e.target.result;
+        this.test();
+      };
+      reader.readAsText(file);
+    },
     async do_it() {
       var canvas = document.createElement("canvas");
       var image = new Image();
@@ -111,6 +137,11 @@ export default {
 
       this.imgWidth = image.width;
       this.imgHeight = image.height;
+
+      this.err="";
+      if((this.imgWidth*this.imgHeight*4)<this.input.length*8){
+        this.err="Image is too small."
+      }else{
 
       canvas.width = this.imgWidth;
       canvas.height = this.imgHeight;
@@ -144,6 +175,7 @@ export default {
       var imgURL = canvas.toDataURL();
       this.imageAfter = imgURL;
       // console.log(this.imageAfter);
+      }
     },
     string_to_binary() {
       var binary = "";
