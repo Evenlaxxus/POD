@@ -36,6 +36,9 @@ Mamy klucz KEYWORD i chcemy zaszyfrować słowo PASSWORD:
 PA-SX-WO-RD
 
 3. Kodujemy słowo za pomocą macierzy i powyrzszych zasad otrzymując szyfrogram: VHQZOKDA.
+
+## Steganografia
+Dany jest obrazek i tekst do zaszyfrowania. Tekst zamianiany jest na postać binarną, a obrazek na postać macierzy, gdzie każdy piksel reprezentowany jest przez wartości RGBA. Dwa ostatnie bity każdego koloru oraz kanału alfa zamianiane są na dwa kolejne bity tekstu. Następnie obrazek zapisywany jest w formacie png. Dzięki temu tekst zostaje zakodowany w obrazku, którego zniekształcenie jest niezauważalne.
 ## Project setup
 ```
 npm install
