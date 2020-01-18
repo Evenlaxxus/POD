@@ -5,7 +5,7 @@
         <v-row>
           <v-col>
             <h1 class="text-center">
-              Szyfrator
+              Encoder
             </h1>
           </v-col>
         </v-row>

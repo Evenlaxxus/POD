@@ -5,7 +5,7 @@
         <v-row>
           <v-col>
             <h1 class="text-center">
-              Kryptografia wizualna
+              Visual cryptography
             </h1>
           </v-col>
         </v-row>
@@ -18,75 +18,58 @@
           ></v-textarea>
         </v-row>
         <v-row>
-          <p class="red--text">{{err}}</p>
-        </v-row>
-      <v-row>
-          <v-file-input
-            v-model="file_txt"
-            placeholder="Upload your txt file"
-            label="File input"
-            accept=".txt"
-            prepend-icon="mdi-paperclip"
-            @change="loadTextFromFile"
-          >
-          </v-file-input>
+          <v-btn @click="write_text">Put text into image</v-btn>
         </v-row>
         <v-row>
-          <v-file-input
-            v-model="file"
-            placeholder="Upload your image"
-            label="File input"
-            prepend-icon="mdi-camera"
-            @change="loadImageFromFile"
-          >
-          </v-file-input>
-        </v-row>
-
-        <v-row>
-          <v-btn @click="do_it">Put text into image</v-btn>
-        </v-row>
-        <v-row>
-          <v-col cols="6">
-            <h2>Image before</h2>
-
-            <v-img height="100%" width="100%" v-bind:src="image"></v-img>
-          </v-col>
-          <v-col cols="6">
-            <h2>Image after</h2>
-
-            <v-img height="100%" width="100%" v-bind:src="imageAfter"></v-img>
-          </v-col>
-        </v-row>
-        <v-row
-          ><v-col>
-            <v-textarea
-              v-model="ct_b"
-              name="Color table before"
-              label="Color table before"
-              placeholder="Color table before."
-            ></v-textarea>
-          </v-col>
           <v-col>
-            <v-textarea
-              v-model="ct_a"
-              name="Color table after"
-              label="Color table after"
-              placeholder="Color table after."
-            ></v-textarea>
+            <h2 class="text-center">
+              Original image
+            </h2>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col align="center">
+            <v-card width="200" height="100">
+              <canvas id="myCanvas" width="200" height="100">
+                Your browser does not support the canvas element.
+              </canvas>
+            </v-card>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <v-textarea
-              v-model="text_from_img"
-              name="text_from_img"
-              label="Return to text"
-              placeholder="Decoded text will appear here."
-            ></v-textarea>
+            <h2 class="text-center">
+              Split image
+            </h2>
           </v-col>
         </v-row>
         <v-row>
-          <v-btn @click="saveBase64AsFile">Download</v-btn>
+          <v-col align="center">
+            <v-card width="800" height="200">
+              <VueDragResize
+                :isActive="true"
+                :isResizable="false"
+                :parentLimitation="true"
+                :w="400"
+                :h="200"
+              >
+                <canvas id="myCanvas1" width="400" height="200">
+                  Your browser does not support the canvas element.
+                </canvas>
+              </VueDragResize>
+              <VueDragResize
+                :isActive="true"
+                :isResizable="false"
+                :parentLimitation="true"
+                :w="400"
+                :h="200"
+              >
+                <canvas id="myCanvas2" width="400" height="200">
+                  Your browser does not support the canvas element.
+                </canvas>
+              </VueDragResize>
+            </v-card>
+          </v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -94,152 +77,160 @@
 </template>
 
 <script>
+import VueDragResize from "vue-drag-resize";
+
 export default {
+  components: {
+    VueDragResize
+  },
   data: () => ({
-    url: "",
-    err: "",
     input: "",
-    byte_text: "",
-    image: "",
-    imageAfter: "",
-    text_from_img: "",
-    file_txt: null,
-    file: null,
-    ct_b: null,
-    ct_a: null,
-    imgWidth: 0,
-    imgHeight: 0
+    context: null,
+    context1: null,
+    context2: null
   }),
   methods: {
-    loadImageFromFile() {
-      const file = this.file;
-      const reader = new FileReader();
-
-      reader.onload = e => {
-        this.url = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    write_text() {
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.rect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(255, 255, 255)";
+      ctx.fill();
+      ctx.fillStyle = "black";
+      ctx.font = "30px Arial";
+      ctx.fillText(this.input, 10, 50);
+      this.context = ctx;
+      this.random_canvas();
+      this.fill_second_canvas();
     },
-      loadTextFromFile() {
-      const file = this.file_txt;
-      const reader = new FileReader();
-      reader.onload = e => {
-        this.input = e.target.result;
-        this.test();
-      };
-      reader.readAsText(file);
-    },
-    async do_it() {
-      var canvas = document.createElement("canvas");
-      var image = new Image();
-      image.src = this.url;
-      await image;
+    random_canvas() {
+      var canvas = document.getElementById("myCanvas1");
+      var ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.rect(0, 0, canvas.width, canvas.height);
+      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      var data = imageData.data;
+      // console.log(data);
 
-      this.imgWidth = image.width;
-      this.imgHeight = image.height;
+      for (var i = 0; i < canvas.height; i += 2) {
+        for (var j = 0; j < canvas.width * 4; j += 8) {
+          var rand = Math.round(Math.random());
+          var first_row = i * canvas.width * 4;
+          var second_row = (i + 1) * canvas.width * 4;
 
-      this.err="";
-      if((this.imgWidth*this.imgHeight*4)<this.input.length*8){
-        this.err="Image is too small."
-      }else{
+          //pixel 1
+          data[j + first_row] = data[j + first_row + 1] = data[
+            j + first_row + 2
+          ] = rand * 255;
 
-      canvas.width = this.imgWidth;
-      canvas.height = this.imgHeight;
+          //pixel 2
+          data[j + first_row + 4] = data[j + first_row + 5] = data[
+            j + first_row + 6
+          ] = (1 - rand) * 255;
 
-      // console.log(this.url);
+          //transparency
+          data[j + first_row + 3] = data[j + first_row + 7] = data[
+            j + second_row + 3
+          ] = data[j + second_row + 7] = 126;
 
-      this.image = image.src;
-      var c = canvas.getContext("2d");
-      c.drawImage(image, 0, 0, this.imgWidth, this.imgHeight);
+          //pixel 3
+          data[j + second_row] = data[j + second_row + 1] = data[
+            j + second_row + 2
+          ] = rand * 255;
 
-      var imgData = c.getImageData(0, 0, this.imgWidth, this.imgHeight);
-      var data = imgData.data;
-      //tutaj edytuj piksele
-      this.string_to_binary();
-
-      //TODO tablica kolorów przed
-
-      console.log(data);
-      this.ct_b = copyArray(data);
-
-      data = this.binary_to_img(imgData.data);
-
-      console.log(data);
-      this.ct_a = data;
-
-      c.putImageData(imgData, 0, 0);
-      // console.log(c.getImageData(0, 0, canvas.width, canvas.height));
-
-      this.read_from_img(imgData.data);
-
-      var imgURL = canvas.toDataURL();
-      this.imageAfter = imgURL;
-      // console.log(this.imageAfter);
-      }
-    },
-    string_to_binary() {
-      var binary = "";
-      for (let i = 0; i < this.input.length; i++) {
-        var pom = "";
-        pom = this.input.charCodeAt(i).toString(2);
-        while (pom.length < 8) {
-          pom = "0" + pom;
+          //pixel 4
+          data[j + second_row + 4] = data[j + second_row + 5] = data[
+            j + second_row + 6
+          ] = (1 - rand) * 255;
         }
-        binary += pom;
       }
-      this.byte_text = binary;
+      ctx.putImageData(imageData, 0, 0);
+      this.context1 = ctx;
     },
-    binary_to_img(colorTab) {
-      for (let i = 0, j = 0; i < this.byte_text.length; i = i + 2, j++) {
-        var pom = "";
-        pom = colorTab[j].toString(2);
-        while (pom.length < 8) {
-          pom = "0" + pom;
+    fill_second_canvas() {
+      var canvas = document.getElementById("myCanvas2");
+      var ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.rect(0, 0, canvas.width, canvas.height);
+      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      var data = imageData.data;
+
+      var originalImageData = this.context.getImageData(0, 0, 200, 100);
+      var originalData = originalImageData.data;
+
+      var firstImageData = this.context1.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      var firstData = firstImageData.data;
+
+      for (var i = 0; i < canvas.height; i += 2) {
+        for (var j = 0; j < canvas.width * 4; j += 8) {
+          var first_row = i * canvas.width * 4;
+          var second_row = (i + 1) * canvas.width * 4;
+
+          if (originalData[(j + first_row) / 2] < 220) {
+            //pixel 1
+            data[j + first_row] = data[j + first_row + 1] = data[
+              j + first_row + 2
+            ] = 255 - firstData[j + first_row];
+
+            //pixel 2
+            data[j + first_row + 4] = data[j + first_row + 5] = data[
+              j + first_row + 6
+            ] = 255 - firstData[j + first_row + 4];
+
+            //transparency
+            data[j + first_row + 3] = data[j + first_row + 7] = data[
+              j + second_row + 3
+            ] = data[j + second_row + 7] = 126;
+
+            //pixel 3
+            data[j + second_row] = data[j + second_row + 1] = data[
+              j + second_row + 2
+            ] = 255 - firstData[j + second_row];
+
+            //pixel 4
+            data[j + second_row + 4] = data[j + second_row + 5] = data[
+              j + second_row + 6
+            ] = 255 - firstData[j + second_row + 4];
+          } else {
+            //pixel 1
+            data[j + first_row] = data[j + first_row + 1] = data[
+              j + first_row + 2
+            ] = firstData[j + first_row];
+
+            //pixel 2
+            data[j + first_row + 4] = data[j + first_row + 5] = data[
+              j + first_row + 6
+            ] = firstData[j + first_row + 4];
+
+            //transparency
+            data[j + first_row + 3] = data[j + first_row + 7] = data[
+              j + second_row + 3
+            ] = data[j + second_row + 7] = 126;
+
+            //pixel 3
+            data[j + second_row] = data[j + second_row + 1] = data[
+              j + second_row + 2
+            ] = firstData[j + second_row];
+
+            //pixel 4
+            data[j + second_row + 4] = data[j + second_row + 5] = data[
+              j + second_row + 6
+            ] = firstData[j + second_row + 4];
+          }
         }
-
-        colorTab[j] = parseInt(
-          pom.substring(0, pom.length - 2) +
-            this.byte_text[i] +
-            this.byte_text[i + 1],
-          2
-        );
       }
-      return colorTab;
-    },
-    saveBase64AsFile() {
-      var link = document.createElement("a");
-
-      link.setAttribute("href", this.imageAfter);
-      link.setAttribute("download", "plik.png");
-      link.click();
-    },
-    read_from_img(colorTab) {
-      var text = "";
-      for (let i = 0; i < this.byte_text.length / 2; i++) {
-        var pom = "";
-        pom = colorTab[i].toString(2);
-        while (pom.length < 8) {
-          pom = "0" + pom;
-        }
-
-        text += pom.substring(pom.length - 2, pom.length);
-      }
-
-      //binary to string
-      var s = "";
-      this.text_from_img = "";
-      for (let i = 0; i < text.length; i = i + 8) {
-        s = text.slice(i, i + 8);
-        this.text_from_img += String.fromCharCode(parseInt(s, 2));
-      }
+      ctx.putImageData(imageData, 0, 0);
+      this.context1 = ctx;
     }
   }
 };
-function copyArray(tab) {
-  var newTab = new Array();
-  for (let i = 0; i < tab.length; i++) {
-    newTab.push(tab[i]);
-  }
-  return newTab;
-}
 </script>

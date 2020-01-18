@@ -14,7 +14,7 @@
       <v-tabs vertical background-color="grey darken-3">
         <!-- zakładka 1 -->
         <v-tab>
-          Szyfr Playfair
+          Playfair cipher
         </v-tab>
         <v-divider></v-divider>
         <v-tab-item>
@@ -22,7 +22,7 @@
         </v-tab-item>
         <!-- zakładka 2 -->
         <v-tab>
-          Generator Samoobcinający
+          Self shrinking generator
         </v-tab>
         <v-divider></v-divider>
         <v-tab-item>
@@ -31,7 +31,7 @@
 
         <!-- zakładka 3 -->
         <v-tab>
-          Szyfrator
+          Encoder
         </v-tab>
         <v-divider></v-divider>
         <v-tab-item>
@@ -40,7 +40,7 @@
 
         <!-- zakładka 4 -->
         <v-tab>
-          Testy
+          FIPS 140-2 tests
         </v-tab>
         <v-divider></v-divider>
         <v-tab-item>
@@ -49,7 +49,7 @@
 
         <!-- zakładka 5 -->
         <v-tab>
-          Steganografia
+          Steganography
         </v-tab>
         <v-divider></v-divider>
         <v-tab-item>
@@ -58,7 +58,7 @@
 
         <!-- zakładka 6 -->
         <v-tab>
-          Kryptografia Wizualna
+          Visual cryptography
         </v-tab>
         <v-divider></v-divider>
         <v-tab-item>

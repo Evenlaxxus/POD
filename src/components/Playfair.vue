@@ -5,7 +5,7 @@
         <v-row>
           <v-col>
             <h1 class="text-center">
-              Szyfr Playfair
+              Playfair cipher
             </h1>
           </v-col>
         </v-row>

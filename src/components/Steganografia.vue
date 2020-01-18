@@ -5,7 +5,7 @@
         <v-row>
           <v-col>
             <h1 class="text-center">
-              Steganografia
+              Steganography
             </h1>
           </v-col>
         </v-row>
@@ -18,9 +18,9 @@
           ></v-textarea>
         </v-row>
         <v-row>
-          <p class="red--text">{{err}}</p>
+          <p class="red--text">{{ err }}</p>
         </v-row>
-      <v-row>
+        <v-row>
           <v-file-input
             v-model="file_txt"
             placeholder="Upload your txt file"
@@ -120,7 +120,7 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-      loadTextFromFile() {
+    loadTextFromFile() {
       const file = this.file_txt;
       const reader = new FileReader();
       reader.onload = e => {
@@ -138,43 +138,42 @@ export default {
       this.imgWidth = image.width;
       this.imgHeight = image.height;
 
-      this.err="";
-      if((this.imgWidth*this.imgHeight*4)<this.input.length*8){
-        this.err="Image is too small."
-      }else{
+      this.err = "";
+      if (this.imgWidth * this.imgHeight * 4 < this.input.length * 8) {
+        this.err = "Image is too small.";
+      } else {
+        canvas.width = this.imgWidth;
+        canvas.height = this.imgHeight;
 
-      canvas.width = this.imgWidth;
-      canvas.height = this.imgHeight;
+        // console.log(this.url);
 
-      // console.log(this.url);
+        this.image = image.src;
+        var c = canvas.getContext("2d");
+        c.drawImage(image, 0, 0, this.imgWidth, this.imgHeight);
 
-      this.image = image.src;
-      var c = canvas.getContext("2d");
-      c.drawImage(image, 0, 0, this.imgWidth, this.imgHeight);
+        var imgData = c.getImageData(0, 0, this.imgWidth, this.imgHeight);
+        var data = imgData.data;
+        //tutaj edytuj piksele
+        this.string_to_binary();
 
-      var imgData = c.getImageData(0, 0, this.imgWidth, this.imgHeight);
-      var data = imgData.data;
-      //tutaj edytuj piksele
-      this.string_to_binary();
+        //TODO tablica kolorów przed
 
-      //TODO tablica kolorów przed
+        console.log(data);
+        this.ct_b = copyArray(data);
 
-      console.log(data);
-      this.ct_b = copyArray(data);
+        data = this.binary_to_img(imgData.data);
 
-      data = this.binary_to_img(imgData.data);
+        console.log(data);
+        this.ct_a = data;
 
-      console.log(data);
-      this.ct_a = data;
+        c.putImageData(imgData, 0, 0);
+        // console.log(c.getImageData(0, 0, canvas.width, canvas.height));
 
-      c.putImageData(imgData, 0, 0);
-      // console.log(c.getImageData(0, 0, canvas.width, canvas.height));
+        this.read_from_img(imgData.data);
 
-      this.read_from_img(imgData.data);
-
-      var imgURL = canvas.toDataURL();
-      this.imageAfter = imgURL;
-      // console.log(this.imageAfter);
+        var imgURL = canvas.toDataURL();
+        this.imageAfter = imgURL;
+        // console.log(this.imageAfter);
       }
     },
     string_to_binary() {

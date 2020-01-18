@@ -5,7 +5,7 @@
         <v-row>
           <v-col>
             <h1 class="text-center">
-              Testy FIPS 140-2
+              FIPS 140-2 tests
             </h1>
           </v-col>
         </v-row>

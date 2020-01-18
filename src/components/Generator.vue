@@ -5,7 +5,7 @@
         <v-row>
           <v-col>
             <h1 class="text-center">
-              Generator Samoobcinający
+              Self shrinking generator
             </h1>
           </v-col>
         </v-row>
