@@ -47,6 +47,8 @@ W pierwszym losowany jest układ pokseli w ten sposób, aby na czterech pikselac
 
 W drugim sprawdzamy oryginalny obrazek piksel po pikselu. Jeżeli piksel jest biały do obrazka wstawiamy cztery odpowiadające mu piksele w takim samym ułożeniu jak w pierwszym obrazku, natomiast jeżeli jest czarny piksele te są odwrtotne do pierwszego obrazka. 
 
+Po nałożeniu obrazków na siebie widoczny staje się tekst z oryginalnego obrazka.
+
 Możliwe układy czterech pikseli:
 
 |B|C|
@@ -57,13 +59,7 @@ Możliwe układy czterech pikseli:
 |-|-|
 |C|B|
 
-|C|B|   |B|C|
-|-|-|   |-|-|
-|B|C|   |C|B|
-
-|B|C|
-|-|-|
-|C|B|
+Jak widać dolny rząd pikseli jest taki sam jak górny, został on dodany w celu zachowania proporcji oryginalnego obrazka.
 
 ## Project setup
 ```
